@@ -26,7 +26,7 @@ public class CustomRequestBodyAdvice implements RequestBodyAdvice {
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        log.info("body_request: " + JSONUtils.toJsonString(body));
+        log.debug(JSONUtils.toJsonString(body));
         return body;
     }
 

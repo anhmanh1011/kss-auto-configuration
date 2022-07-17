@@ -13,7 +13,6 @@ public class ErrorResponse {
     Integer code;
     String message;
 
-
     public ErrorResponse(ApiException apiException) {
         this.code = apiException.getErrorCode();
         this.message = apiException.getMessage();

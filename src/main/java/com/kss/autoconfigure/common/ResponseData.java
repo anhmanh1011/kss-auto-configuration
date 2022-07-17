@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 public class ResponseData<T> implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1234567890;
 
     private final String time;
 
@@ -23,7 +23,6 @@ public class ResponseData<T> implements Serializable {
     private String message;
 
     private T data;
-
 
     @JsonProperty("trace_id")
     private String traceId;
@@ -76,11 +75,6 @@ public class ResponseData<T> implements Serializable {
         this.code = apiException.getErrorCode();
         this.message = apiException.getMessage();
         return this;
-    }
-
-
-    public void setData(T data) {
-        this.data = data;
     }
 
 }

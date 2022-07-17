@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public enum EnumCodeResponse implements IResponseCode {
+public enum EnumCodeCommonResponse implements IResponseCode {
 
     INTERNAL_SERVER(500, "Internal Server Error"),
     UNAUTHORIZED(401, "UNAUTHORIAZOR"),
@@ -19,7 +19,7 @@ public enum EnumCodeResponse implements IResponseCode {
     public final int code;
     public final String message;
 
-    EnumCodeResponse(int code, String message) {
+    EnumCodeCommonResponse(int code, String message) {
         this.code = code;
         this.message = message;
     }

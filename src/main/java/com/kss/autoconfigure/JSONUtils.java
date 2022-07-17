@@ -3,7 +3,7 @@ package com.kss.autoconfigure;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kss.autoconfigure.common.SpringContext;
+import com.kss.autoconfigure.config.SpringContext;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,7 +35,7 @@ public class JSONUtils {
     }
 
     public static String toJsonString(Object obj) {
-        ObjectMapper mapper = getObjectMapper();
+        ObjectMapper mapper = SpringContext.getBean(ObjectMapper.class);
 
         //Object to JSON in String
         String jsonString = "";
@@ -49,6 +49,7 @@ public class JSONUtils {
 
     public static <T> T toObject(String jsonString, Class<T> clazz) {
         //JSON from String to Object
+//        ObjectMapper mapper = SpringContext.getBean(ObjectMapper.class);
         ObjectMapper mapper = SpringContext.getBean(ObjectMapper.class);
         T obj = null;
         try {
@@ -87,7 +88,4 @@ public class JSONUtils {
         return valid;
     }
 
-    private static ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
-    }
 }
