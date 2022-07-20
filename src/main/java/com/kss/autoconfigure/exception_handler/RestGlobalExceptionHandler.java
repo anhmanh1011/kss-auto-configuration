@@ -1,13 +1,13 @@
-package com.kss.autoconfigure.ex;
+package com.kss.autoconfigure.exception_handler;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.kss.autoconfigure.common.EnumCodeCommonResponse;
 import com.kss.autoconfigure.common.ErrorResponse;
+import com.kss.autoconfigure.common.IResponseData;
 import com.kss.autoconfigure.common.ResponseData;
 import lombok.extern.log4j.Log4j2;
-import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +34,11 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<ResponseData<ApiException>> customHandleApiException(
+    public ResponseEntity<IResponseData> customHandleApiException(
             ApiException ex) {
         log.error(ex);
         ex.printStackTrace();
-        return new ResponseEntity<>(new ResponseData<ApiException>().error(ex), HttpStatus.OK);
+        return new ResponseEntity<>(ex, HttpStatus.OK);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiException apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM.getCode(), msg);
         ex.printStackTrace();
-        return new ResponseEntity<ResponseData>(new ResponseData<ApiException>().error(apiException), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RestUnauthorizedException.class)
@@ -84,26 +84,26 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity handlerUnauthorizedException(
             RestUnauthorizedException error) {
         log.error(error);
-        return new ResponseEntity<>(new ResponseData<ApiException>().error(error), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ResponseData> customHandleException(
+    public ResponseEntity customHandleException(
             Exception ex) {
         log.error(ex);
-        return new ResponseEntity<ResponseData>(new ResponseData<ApiException>().error(new ApiException(EnumCodeCommonResponse.INTERNAL_SERVER)), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ApiException(EnumCodeCommonResponse.INTERNAL_SERVER), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex);
-        ErrorResponse error = null;
+        ApiException apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM);
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            error = new ErrorResponse(EnumCodeCommonResponse.INVALID_PARAM.getCode(), fieldError.getField() + " " + fieldError.getDefaultMessage());
+            apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM.getCode(), fieldError.getField() + " " + fieldError.getDefaultMessage());
         }
-        return new ResponseEntity<>(new ResponseData<>().error(error.getCode(), error.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
 }

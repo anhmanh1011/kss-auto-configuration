@@ -1,8 +1,8 @@
-package com.kss.autoconfigure.Interceptor;
+package com.kss.autoconfigure.interceptor;
 
 
 import com.kss.autoconfigure.JSONUtils;
-import com.kss.autoconfigure.common.ResponseData;
+import com.kss.autoconfigure.common.IResponseData;
 import lombok.extern.log4j.Log4j2;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.core.MethodParameter;
@@ -23,9 +23,7 @@ public class CustomResponseBodyAdvice implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (body instanceof ResponseData) {
-            ((ResponseData<?>) body).setTraceId(TraceContext.traceId());
-        }
+        ((IResponseData) body).setTraceId(TraceContext.traceId());
         log.debug(JSONUtils.toJsonString(body));
         return body;
     }

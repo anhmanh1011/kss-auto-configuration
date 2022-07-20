@@ -1,4 +1,4 @@
-package com.kss.autoconfigure.Interceptor;
+package com.kss.autoconfigure.interceptor;
 
 import com.kss.autoconfigure.JSONUtils;
 import lombok.Data;

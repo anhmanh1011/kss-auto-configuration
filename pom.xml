@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.kss</groupId>
-    <artifactId>autoconfigure</artifactId>
+    <artifactId>java-common-lib</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>kss-auto-configure</name>
     <description>kss-auto-configure</description>
@@ -81,10 +81,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.17.2</version>
-            <scope>provided</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
 
@@ -110,8 +108,8 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>public</id>
-            <url>https://nexus.kss.com.vn/repository/public/</url>
+            <id>snapshots</id>
+            <url>https://nexus.kss.com.vn/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <build>

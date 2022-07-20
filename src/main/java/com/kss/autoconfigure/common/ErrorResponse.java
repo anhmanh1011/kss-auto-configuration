@@ -1,7 +1,6 @@
 package com.kss.autoconfigure.common;
 
-import com.kss.autoconfigure.ex.ApiException;
-import com.kss.autoconfigure.ex.RestUnauthorizedException;
+import com.kss.autoconfigure.exception_handler.ApiException;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,14 +13,8 @@ public class ErrorResponse {
     String message;
 
     public ErrorResponse(ApiException apiException) {
-        this.code = apiException.getErrorCode();
+        this.code = apiException.getCode();
         this.message = apiException.getMessage();
-        time = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
-    }
-
-    public ErrorResponse(RestUnauthorizedException restUnauthorizedException) {
-        this.code = restUnauthorizedException.getErrorCode();
-        this.message = restUnauthorizedException.getMessage();
         time = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 

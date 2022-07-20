@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(
-        basePackages = {"com.kss.autoconfigure.Interceptor", "com.kss.autoconfigure.config"}
+        basePackages = {"com.kss.autoconfigure.interceptor", "com.kss.autoconfigure.config","com.kss.autoconfigure.exception_handler"}
 )
 public class KssAutoConfiguration {
 }

@@ -2,8 +2,6 @@ package com.kss.autoconfigure.common;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kss.autoconfigure.ex.ApiException;
-import com.kss.autoconfigure.ex.RestUnauthorizedException;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 
 @Data
-public class ResponseData<T> implements Serializable {
+public class ResponseData<T> implements Serializable,IResponseData {
 
     private static final long serialVersionUID = 1234567890;
 
@@ -49,31 +47,6 @@ public class ResponseData<T> implements Serializable {
         this.data = data;
         this.code = code;
         this.message = message;
-        return this;
-    }
-
-    public ResponseData<T> error(int code, String message) {
-        this.code = code;
-        this.message = message;
-        return this;
-    }
-
-    public ResponseData<T> error(int code, String message, T data) {
-        this.data = data;
-        this.code = code;
-        this.message = message;
-        return this;
-    }
-
-    public ResponseData<T> error(ApiException apiException) {
-        this.code = apiException.getErrorCode();
-        this.message = apiException.getMessage();
-        return this;
-    }
-
-    public ResponseData<T> error(RestUnauthorizedException apiException) {
-        this.code = apiException.getErrorCode();
-        this.message = apiException.getMessage();
         return this;
     }
 
