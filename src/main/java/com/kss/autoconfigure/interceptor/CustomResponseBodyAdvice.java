@@ -23,7 +23,9 @@ public class CustomResponseBodyAdvice implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        ((IResponseData) body).setTraceId(TraceContext.traceId());
+        if (body instanceof IResponseData) {
+             ((IResponseData) body).setTraceId(TraceContext.traceId());
+        }
         log.debug(JSONUtils.toJsonString(body));
         return body;
     }
