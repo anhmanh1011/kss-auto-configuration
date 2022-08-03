@@ -32,7 +32,7 @@ public class KssInterceptor implements HandlerInterceptor {
         logFilterRequest.setHeader(getHeadersInfo(request));
         ThreadContext.put("trace_id", TraceContext.traceId());
         ThreadContext.put("client_ip", request.getRemoteAddr());
-        log.debug(JSONUtils.toJsonString(logFilterRequest));
+        log.trace(JSONUtils.toJsonString(logFilterRequest));
         return true;
     }
 

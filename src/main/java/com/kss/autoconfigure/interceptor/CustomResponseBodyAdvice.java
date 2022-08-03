@@ -26,7 +26,7 @@ public class CustomResponseBodyAdvice implements ResponseBodyAdvice {
         if (body instanceof IResponseData) {
              ((IResponseData) body).setTraceId(TraceContext.traceId());
         }
-        log.debug(JSONUtils.toJsonString(body));
+        log.trace(JSONUtils.toJsonString(body));
         return body;
     }
 }
