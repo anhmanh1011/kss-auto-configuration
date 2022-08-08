@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.kss</groupId>
     <artifactId>java-common-lib</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>05082022</version>
     <name>kss-auto-configure</name>
     <description>kss-auto-configure</description>
 
@@ -110,10 +110,11 @@
     </dependencyManagement>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>https://nexus.kss.com.vn/repository/snapshots/</url>
-        </snapshotRepository>
+        <repository>
+            <id>public</id>
+            <url>https://nexus.kss.com.vn/repository/public/</url>
+            <name>public</name>
+        </repository>
     </distributionManagement>
     <build>
         <pluginManagement>

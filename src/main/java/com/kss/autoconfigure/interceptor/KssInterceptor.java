@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +20,7 @@ import java.util.Map;
 public class KssInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         LogFilterRequest logFilterRequest = new LogFilterRequest();
         logFilterRequest.setClientIp(request.getRemoteAddr());
@@ -30,7 +28,11 @@ public class KssInterceptor implements HandlerInterceptor {
         logFilterRequest.setParameter(request.getParameterMap());
         logFilterRequest.setMethod(request.getMethod());
         logFilterRequest.setHeader(getHeadersInfo(request));
-        ThreadContext.put("trace_id", TraceContext.traceId());
+
+        if (StringUtils.hasLength(request.getHeader("trace_id")))
+            ThreadContext.put("trace_id", request.getHeader("trace_id"));
+        else ThreadContext.put("trace_id", TraceContext.traceId());
+
         ThreadContext.put("client_ip", request.getRemoteAddr());
         log.trace(JSONUtils.toJsonString(logFilterRequest));
         return true;
@@ -38,11 +40,7 @@ public class KssInterceptor implements HandlerInterceptor {
 
 
     @Override
-    public void afterCompletion(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Object handler,
-            Exception ex) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ThreadContext.clearAll();
     }
 
