@@ -5,7 +5,7 @@ import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.header.Header;
-import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+import org.apache.logging.log4j.ThreadContext;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class AuditProducerInterceptor<K, V> implements ProducerInterceptor<Strin
 
             @Override
             public byte[] value() {
-                return TraceContext.traceId().getBytes();
+                return ThreadContext.get("trace_id").getBytes();
             }
         });
         return producerRecord;
