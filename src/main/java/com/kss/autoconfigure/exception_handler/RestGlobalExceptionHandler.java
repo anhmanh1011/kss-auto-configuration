@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.kss.autoconfigure.common.EnumCodeCommonResponse;
-import com.kss.autoconfigure.common.ErrorResponse;
 import com.kss.autoconfigure.common.IResponseData;
-import com.kss.autoconfigure.common.ResponseData;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,7 +40,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex);
 
         String msg = null;
@@ -96,8 +94,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiException(EnumCodeCommonResponse.INTERNAL_SERVER), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Override
-    protected ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex);
         ApiException apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM);
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
