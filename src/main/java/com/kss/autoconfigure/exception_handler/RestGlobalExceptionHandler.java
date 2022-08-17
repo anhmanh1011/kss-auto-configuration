@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -94,7 +95,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiException(EnumCodeCommonResponse.INTERNAL_SERVER), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    public ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public   ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error(ex);
         ApiException apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM);
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
@@ -103,4 +104,17 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        log.error(ex);
+        ApiException apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM);
+        if(ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException ex1 = (MethodArgumentNotValidException) ex;
+            for (FieldError fieldError : ex1.getBindingResult().getFieldErrors()) {
+                apiException = new ApiException(EnumCodeCommonResponse.INVALID_PARAM.getCode(), fieldError.getField() + " " + fieldError.getDefaultMessage());
+            }
+            return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+    }
 }
